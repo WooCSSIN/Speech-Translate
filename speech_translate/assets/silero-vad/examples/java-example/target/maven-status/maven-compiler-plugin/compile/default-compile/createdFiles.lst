@@ -1,0 +1,4 @@
+org\example\App.class
+org\example\SlieroVadDetector.class
+org\example\SlieroVadOnnxModel.class
+org\example\SlieroVadOnnxModel$ValidationResult.class

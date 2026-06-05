@@ -1,0 +1,48 @@
+__pycache__/
+
+# Environments
+.env
+.envcpu
+.envgpu
+.venv
+.venvcpu
+.venvgpu
+env/
+envcpu/
+envgpu/
+venv/
+venvcpu/
+venvgpu/
+ENV/
+env.bak/
+venv.bak/
+venvtest/
+
+# Project specific
+speech_translate/_user/
+speech_translate/temp/
+speech_translate/debug/
+speech_translate/export/
+speech_translate/log/
+build/
+dist/
+output/
+
+# ignore
+ignore/
+
+# Han Translate - security sensitive (never commit)
+*.key
+n8n_encryption_key.txt
+.han_translate/
+HanTranslate.spec
+*.spec
+
+# created when building
+LICENSE.txt 
+requirements_temp.txt
+*.spec
+SpeechTranslate.egg-info/
+installer_output/
+dist/
+build/

@@ -1,0 +1,91 @@
+{
+  "name": "Han Translate - Context-Aware Translation",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "han-translate",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "han-translate-hook"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8000/translate",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Key",
+              "value": "={{ $env.HAN_TRANSLATE_API_KEY }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \"{{ $json.body.text }}\",\n  \"source_lang\": \"{{ $json.body.source_lang || 'auto' }}\",\n  \"target_lang\": \"{{ $json.body.target_lang || 'vi' }}\",\n  \"domain\": {{ $json.body.domain ? ('\"' + $json.body.domain + '\"') : 'null' }}\n}",
+        "options": {}
+      },
+      "id": "http-translate",
+      "name": "Han Translate API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [560, 300]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1",
+              "name": "original",
+              "value": "={{ $json.original }}",
+              "type": "string"
+            },
+            {
+              "id": "a2",
+              "name": "translated",
+              "value": "={{ $json.translated }}",
+              "type": "string"
+            },
+            {
+              "id": "a3",
+              "name": "domain",
+              "value": "={{ $json.domain_name }}",
+              "type": "string"
+            },
+            {
+              "id": "a4",
+              "name": "auto_detected",
+              "value": "={{ $json.auto_detected }}",
+              "type": "boolean"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "format-result",
+      "name": "Format Result",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [880, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [[{ "node": "Han Translate API", "type": "main", "index": 0 }]]
+    },
+    "Han Translate API": {
+      "main": [[{ "node": "Format Result", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": { "executionOrder": "v1" },
+  "active": false
+}
